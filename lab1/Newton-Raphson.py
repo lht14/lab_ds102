@@ -11,12 +11,8 @@ def grad(u):
 def hessian(u):
     x, y = u
     return np.array([
-        [
-            2, 0
-        ],
-        [
-            0, 4
-        ]
+        [2, 0],
+        [0, 4]
     ])
 
 def newton_optim(u_0, grad_fn, hessian_fn, epsilon = 1e-8, max_iter=100):
