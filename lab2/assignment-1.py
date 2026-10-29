@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import confusion_matrix
+from matplotlib import pyplot as plt
 from LogisticRegression import LogisticRegression
 
 train_data = pd.read_csv("lab_ds102/lab2/data/train_worldbank.csv")
@@ -33,12 +33,13 @@ model = LogisticRegression(
 model.fit(train_X, train_labels)
 predicted_labels = model.predict(test_X)
 metrics = model.evaluate(test_labels, predicted_labels)
-print('=' * 10)
 
 for metric in metrics:
     print(f'{metric}: {metrics[metric]}')
 
-# Chuyển xác suất thành nhãn
-predicted_classes = np.where(predicted_labels <= 0.5, 0, 1)
-cfm = confusion_matrix(test_labels, predicted_classes)
-print(cfm)
+plt.plot(model.losses)
+plt.xlabel("Epoch")
+plt.ylabel("Cross-Entropy Loss")
+plt.title("Training Loss")
+plt.grid()
+plt.show()
