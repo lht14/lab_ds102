@@ -15,6 +15,7 @@ class SoftmaxRegression:
         N, d = X.shape
         _, k = y.shape
         self.w = np.zeros((d, k))
+        self.b = np.zeros(k)
         e = 0
         with tqdm(range(self.epoch)) as pbar:
             for _ in pbar:
@@ -22,6 +23,7 @@ class SoftmaxRegression:
                 delta_y = (y_hat - y)
                 gradient = X.T @ delta_y
                 self.w = self.w - (1/N) * self.lr * gradient
+                self.b = self.b - self.lr * delta_y.mean(axis=0)
                 l = self.loss_fn(y, y_hat)
                 self.losses.append(l)
                 pbar.set_postfix({
@@ -35,7 +37,7 @@ class SoftmaxRegression:
         return np.exp(z) / denum
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        z = X @ self.w
+        z = X @ self.w + self.b
         y_hat = self.softmax(z)
         return y_hat
 

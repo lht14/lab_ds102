@@ -17,20 +17,17 @@ class LogisticRegression:
     def fit(self, X: np.ndarray, y: np.ndarray):
         N, d = X.shape
         self.w = np.zeros((d,), dtype=np.float64)
+        self.b = 0.0
         e = 0
         with tqdm(range(self.epoch), desc=f"Epoch {e+1}:") as pbar:
             for _ in pbar:
-                # forward pass
                 y_hat = self.predict(X)
                 deltal_y = y_hat - y  
-
-                # backward pass
                 gradient = deltal_y.T @ X  
                 self.w = self.w - (1/N)*self.lr*gradient.T
-
+                self.b = self.b - self.lr * deltal_y.mean()
                 l = self.loss_fn(y, y_hat)
                 self.losses.append(l)
-
                 pbar.set_postfix({"loss": l})
             e += 1
 
@@ -38,7 +35,7 @@ class LogisticRegression:
         return 1 / (1 + np.exp(-z))
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        z = X @ self.w 
+        z = X @ self.w + self.b
         y_hat = self.sigmoid(z)
         return y_hat
 
