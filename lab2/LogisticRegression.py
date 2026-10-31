@@ -21,13 +21,18 @@ class LogisticRegression:
         e = 0
         with tqdm(range(self.epoch), desc=f"Epoch {e+1}:") as pbar:
             for _ in pbar:
+                # forward pass
                 y_hat = self.predict(X)
-                deltal_y = y_hat - y  
-                gradient = deltal_y.T @ X  
-                self.w = self.w - (1/N)*self.lr*gradient.T
+                deltal_y = y_hat - y  # (N, 1)
+
+                # backward pass
+                gradient = deltal_y.T @ X   #(1, d)
+                self.w = self.w - (1/N)*self.lr*gradient.T  # (d, 1)
                 self.b = self.b - self.lr * deltal_y.mean()
+
                 l = self.loss_fn(y, y_hat)
                 self.losses.append(l)
+                
                 pbar.set_postfix({"loss": l})
             e += 1
 

@@ -20,12 +20,15 @@ class SoftmaxRegression:
         with tqdm(range(self.epoch)) as pbar:
             for _ in pbar:
                 y_hat = self.predict(X)
+
                 delta_y = (y_hat - y)
                 gradient = X.T @ delta_y
                 self.w = self.w - (1/N) * self.lr * gradient
                 self.b = self.b - self.lr * delta_y.mean(axis=0)
+
                 l = self.loss_fn(y, y_hat)
                 self.losses.append(l)
+                
                 pbar.set_postfix({
                     "Epoch": e+1,
                     "Loss": l
